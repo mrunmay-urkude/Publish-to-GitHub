@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int minute =0;
+        int m= grid.size();
+        int n= grid[0].size(); 
+        queue<pair<int,pair<int,int>>>q;
+        vector<vector<bool>>visited(m,vector<bool>(n,false));
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==2){
+                    q.push({0,{i,j}});
+                    visited[i][j]=true;
+                }
+            }
+        }
+        int dx[4]={1,0,-1,0};
+        int dy[4]={0,1,0,-1};
+        while(!q.empty()){
+            int time = q.front().first;
+            int x=q.front().second.first;
+            int y=q.front().second.second;
+            minute=max(minute,time);
+            q.pop();
+            for(int i=0;i<4;i++){
+                int newx=x+dx[i];
+                int newy=y+dy[i];
+                if(newx>=0&&newy>=0&&newx<m&&newy<n&&grid[newx][newy]==1&&!visited[newx][newy]){
+                    q.push({time+1,{newx,newy}});
+                    visited[newx][newy]=true;
+                }
+            }
+        }
+        for(int i =0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(!visited[i][j]&&grid[i][j]==1)return -1;
+            }
+        }
+        return minute;
+    }
+};
